@@ -1,0 +1,16 @@
+# Dependências
+node_modules/
+
+# Build e arquivos temporários do Next.js
+.next/
+out/
+build/
+
+# Variáveis de ambiente e segredos
+.env
+.env*.local
+!.env.local.example
+
+# Logs
+*.log
+npm-debug.log*

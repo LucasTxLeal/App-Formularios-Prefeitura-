@@ -23,7 +23,7 @@ seguranca-trabalho-app/
 │   │   ├── page.tsx                          # Tela 1 - login por código
 │   │   ├── central/page.tsx                  # Tela 2 - grid C1-C11
 │   │   ├── formulario/
-│   │   │   ├── acidente-trabalho/page.tsx    # Tela 3 - formulário C1 (completo)
+│   │   │   ├── y96/page.tsx                  # Tela 3 - formulário Y96 (completo)
 │   │   │   └── [slug]/page.tsx               # placeholder C2-C11
 │   │   ├── admin/
 │   │   │   ├── login/page.tsx                # login do administrador
@@ -34,7 +34,8 @@ seguranca-trabalho-app/
 │   │   │           └── [id]/page.tsx         # relatório completo (estilo impresso)
 │   │   └── api/                              # rotas server-side (auth, reports, admin)
 │   ├── components/
-│   │   ├── SignatureCanvas.tsx               # canvas de assinatura reutilizável
+│   │   ├── FormFields.tsx                    # campos reutilizáveis (texto/select/checkbox)
+│   │   ├── SignatureCanvas.tsx               # canvas de assinatura (disponível p/ C2-C11)
 │   │   └── FormCard.tsx                      # card animado da central
 │   ├── data/formTypes.ts                     # definição estática dos 11 formulários
 │   ├── lib/
@@ -60,7 +61,7 @@ seguranca-trabalho-app/
    precisar dela para este projeto, mas é bom guardar).
 2. Vá em **SQL Editor** → **New query**, cole todo o conteúdo do arquivo
    `supabase/schema.sql` e execute (**RUN**). Isso cria as tabelas
-   `access_codes`, `form_types`, `accident_reports`, ativa o RLS e insere os
+   `access_codes`, `form_types`, `y96_reports`, ativa o RLS e insere os
    códigos de exemplo `2050`, `3040`, `4020`, `5010`.
 3. Vá em **Authentication → Users → Add user** e crie o usuário
    administrador (e-mail + senha) que vai acessar o painel central. Marque
@@ -121,11 +122,14 @@ npm run start
 2. **Tela 2 — Central de formulários:** grid com os 11 tipos de formulário
    (C1 a C11). Nesta versão inicial, **C1 (Relato de Acidente de Trabalho)**
    está totalmente funcional; os demais aparecem como "em breve" e podem ser
-   implementados seguindo o mesmo padrão de `acidente-trabalho/page.tsx`.
-3. **Tela 3 — Formulário de acidente:** dados gerais, detalhamento do
-   acidente e duas assinaturas capturadas em `<canvas>`. Ao enviar, os dados
-   (incluindo as assinaturas em PNG base64) são gravados na tabela
-   `accident_reports`, vinculados automaticamente ao código de acesso da
+   implementados seguindo o mesmo padrão de `y96/page.tsx`.
+3. **Tela 3 — Formulário Y96:** ficha completa de notificação de acidente de
+   trabalho (Dados Gerais, Dados do Trabalho, Dados da Empresa Contratante,
+   Dados do Acidente e Notificador), seguindo a estrutura oficial da ficha
+   SINAN. O encerramento é feito com campos de texto simples (nome e função
+   do notificador) — sem assinatura em canvas. Ao enviar, os dados são
+   gravados na tabela
+   `y96_reports`, vinculados automaticamente ao código de acesso da
    sessão ativa.
 4. **Tela 4 — Painel administrativo:** login separado (Supabase Auth) →
    dashboard com uma "pasta" por código de acesso, mostrando quantos
@@ -139,7 +143,7 @@ npm run start
 ## 4. Segurança implementada
 
 - **Nenhuma tabela tem policy pública de RLS** — todo acesso a
-  `access_codes`, `form_types` e `accident_reports` passa exclusivamente
+  `access_codes`, `form_types` e `y96_reports` passa exclusivamente
   pelas API Routes do servidor, que usam a `service_role key` (nunca exposta
   ao navegador).
 - **Sessões via cookies HTTP-only, `SameSite=Lax` e assinados com
@@ -169,7 +173,7 @@ Cada formulário segue o mesmo padrão do C1:
 
 1. Adicione os campos da tabela em `supabase/schema.sql` (ou crie uma nova
    tabela, ex. `quase_acidente_reports`).
-2. Duplique `src/app/formulario/acidente-trabalho/page.tsx` para
+2. Duplique `src/app/formulario/y96/page.tsx` para
    `src/app/formulario/<slug>/page.tsx`, ajustando os campos do formulário.
 3. Crie a rota `POST /api/reports/<slug>` seguindo o padrão de
    `src/app/api/reports/route.ts`.
