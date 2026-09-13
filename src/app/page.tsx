@@ -88,7 +88,7 @@ function LoginForm() {
             Vigilância em Saúde do Trabalhador
           </h1>
           <p className="text-brand-blue-100 text-sm mt-1">
-            Plataforma Municipal de Relatórios
+            Notificações de Acidente de Trabalho
           </p>
         </div>
 

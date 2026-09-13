@@ -20,7 +20,8 @@ insert into access_codes (code, unidade_nome) values
   ('2050', 'UBSF BGV II'),
   ('3040', 'UBSF Quinta'),
   ('4020', 'UPA Cassino'),
-  ('5010', 'UBS Parque Marinha')
+  ('5010', 'UBS Parque Marinha'),
+  ('1111', 'Teste')
 on conflict (code) do update set unidade_nome = excluded.unidade_nome;
 
 -- Se você já tinha rodado a versão anterior deste script com os códigos
