@@ -1,0 +1,22 @@
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="120" r="116" fill="#15803d"/>
+  <circle cx="120" cy="120" r="116" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="4"/>
+  <!-- capacete -->
+  <path d="M 95 78 A 26 26 0 0 1 147 78 L 150 86 L 92 86 Z" fill="#ffffff"/>
+  <rect x="90" y="84" width="62" height="7" rx="3.5" fill="#ffffff"/>
+  <!-- cabeça -->
+  <circle cx="121" cy="103" r="12" fill="#ffffff"/>
+  <!-- corpo caindo (diagonal) -->
+  <path d="M 112 116 L 138 150" stroke="#ffffff" stroke-width="11" stroke-linecap="round"/>
+  <!-- braco -->
+  <path d="M 118 126 L 90 118" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <!-- pernas -->
+  <path d="M 138 150 L 128 178" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <path d="M 138 150 L 163 164" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <!-- linhas de impacto -->
+  <path d="M 168 108 L 180 100" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 172 120 L 186 120" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 168 132 L 180 140" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <!-- chao -->
+  <line x1="62" y1="184" x2="178" y2="184" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-opacity="0.85"/>
+</svg>

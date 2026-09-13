@@ -1,0 +1,20 @@
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="120" r="116" fill="#dc2626"/>
+  <circle cx="120" cy="120" r="116" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="4"/>
+  <!-- seringa (rotacionada) -->
+  <g transform="rotate(45 120 120)">
+    <!-- corpo do cilindro -->
+    <rect x="86" y="86" width="70" height="30" rx="4" fill="#ffffff"/>
+    <!-- marcacoes de medida -->
+    <line x1="102" y1="86" x2="102" y2="98" stroke="#dc2626" stroke-width="3"/>
+    <line x1="118" y1="86" x2="118" y2="98" stroke="#dc2626" stroke-width="3"/>
+    <line x1="134" y1="86" x2="134" y2="98" stroke="#dc2626" stroke-width="3"/>
+    <!-- embolo -->
+    <rect x="150" y="90" width="26" height="22" rx="3" fill="#ffffff"/>
+    <rect x="172" y="94" width="14" height="14" rx="2" fill="#ffffff"/>
+    <!-- agulha -->
+    <rect x="52" y="98" width="34" height="6" fill="#ffffff"/>
+  </g>
+  <!-- gota de sangue -->
+  <path d="M 165 168 C 173 180 179 188 179 196 C 179 205 172 211 165 211 C 158 211 151 205 151 196 C 151 188 157 180 165 168 Z" fill="#ffffff"/>
+</svg>

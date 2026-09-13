@@ -1,0 +1,147 @@
+import { FormSchema } from "./types";
+import {
+  OPCOES_SEXO_COD,
+  OPCOES_GESTANTE_COD,
+  OPCOES_RACA_COR_COD,
+  OPCOES_ESCOLARIDADE_COD,
+  OPCOES_ZONA,
+  OPCOES_SITUACAO_MERCADO_TRABALHO_COD,
+  OPCOES_TERCEIRIZADA_COD,
+  OPCOES_TEMPO_UNIDADE,
+  OPCOES_REGIME_TRATAMENTO_2,
+  OPCOES_SIM_NAO_COD,
+  OPCOES_MELHORA_PIORA_COD,
+  OPCOES_EVOLUCAO_CASO_9,
+  OPCOES_CAT_COD,
+} from "./options";
+
+export const dermatoseSchema: FormSchema = {
+  slug: "dermatose-ocupacional",
+  table: "dermatose_ocupacional_reports",
+  codigo: "L98.9",
+  titulo: "Dermatose Ocupacional",
+  definicaoCaso:
+    "Toda alteração da pele, mucosas e anexos, direta ou indiretamente causadas, mantidas ou agravadas pelo trabalho, relacionadas à exposição a agentes químicos, biológicos ou físicos, e ainda a quadros psíquicos, podendo ocasionar afecções do tipo irritativa (a maioria) ou sensibilizante, confirmada por critérios clínicos, epidemiológicos ou laboratoriais.",
+  primaryDateKey: "data_diagnostico",
+  primaryLabelKey: "nome_paciente",
+  sections: [
+    {
+      title: "Dados Gerais",
+      fields: [
+        { key: "data_notificacao", label: "Data da Notificação", type: "date", required: true },
+        { key: "data_diagnostico", label: "Data do Diagnóstico", type: "date", required: true },
+        { key: "nome_paciente", label: "Nome do Paciente", type: "text", required: true, fullWidth: true },
+        { key: "data_nascimento", label: "Data de Nascimento", type: "date" },
+        { key: "sexo", label: "Sexo", type: "select", options: OPCOES_SEXO_COD },
+        { key: "gestante", label: "Gestante", type: "select", options: OPCOES_GESTANTE_COD },
+        { key: "raca_cor", label: "Raça/Cor", type: "select", options: OPCOES_RACA_COR_COD },
+        { key: "escolaridade", label: "Escolaridade", type: "select", options: OPCOES_ESCOLARIDADE_COD, fullWidth: true },
+        { key: "cartao_sus", label: "Número do Cartão SUS", type: "text", maxLength: 15, numericOnly: true },
+        { key: "nome_mae", label: "Nome da mãe", type: "text" },
+      ],
+    },
+    {
+      title: "Dados de Residência",
+      fields: [
+        { key: "uf", label: "UF", type: "text", maxLength: 2, uppercase: true },
+        { key: "municipio_residencia", label: "Município de Residência", type: "text" },
+        { key: "bairro", label: "Bairro", type: "text" },
+        { key: "logradouro", label: "Logradouro (rua, avenida...)", type: "text" },
+        { key: "numero_endereco", label: "Número", type: "text" },
+        { key: "complemento", label: "Complemento (apto., casa...)", type: "text" },
+        { key: "cep", label: "CEP", type: "text", maxLength: 8, numericOnly: true },
+        { key: "telefone", label: "(DDD) Telefone", type: "text", maxLength: 11, numericOnly: true },
+        { key: "zona", label: "Zona", type: "select", options: OPCOES_ZONA },
+      ],
+    },
+    {
+      title: "Dados do Trabalho",
+      fields: [
+        { key: "ocupacao", label: "Ocupação", type: "text", required: true, highlight: true },
+        { key: "situacao_mercado_trabalho", label: "Situação no Mercado de Trabalho", type: "select", options: OPCOES_SITUACAO_MERCADO_TRABALHO_COD, fullWidth: true },
+        { key: "tempo_trabalho_ocupacao", label: "Tempo de Trabalho na Ocupação", type: "text" },
+      ],
+    },
+    {
+      title: "Dados da Empresa Contratante",
+      fields: [
+        { key: "empresa_cnpj_cpf", label: "Registro/CNPJ ou CPF", type: "text", maxLength: 14, numericOnly: true },
+        { key: "empresa_nome", label: "Nome da Empresa ou Empregador", type: "text" },
+        { key: "empresa_cnae", label: "Atividade Econômica (CNAE)", type: "text", required: true },
+        { key: "empresa_uf", label: "UF", type: "text", maxLength: 2, uppercase: true },
+        { key: "empresa_municipio", label: "Município", type: "text" },
+        { key: "empresa_bairro", label: "Bairro", type: "text" },
+        { key: "empresa_endereco", label: "Endereço", type: "text" },
+        { key: "empresa_numero", label: "Número", type: "text" },
+        { key: "empresa_telefone", label: "(DDD) Telefone", type: "text", maxLength: 11, numericOnly: true },
+        { key: "empresa_terceirizada", label: "O Empregador é Empresa Terceirizada?", type: "select", options: OPCOES_TERCEIRIZADA_COD, fullWidth: true },
+      ],
+    },
+    {
+      title: "Quadro Clínico e Exposição",
+      fields: [
+        { key: "agravos_associados", label: "Agravos Associados", type: "checkbox-group", fullWidth: true, options: ["Hipertensão Arterial", "Diabetes Mellitus", "Transtorno Mental", "Tuberculose", "Hanseníase", "Asma"] },
+        { key: "agravos_outras", label: "Outras (especifique)", type: "text", fullWidth: true },
+        { key: "tempo_exposicao_agente_valor", label: "Tempo de Exposição ao Agente de Risco", type: "number" },
+        { key: "tempo_exposicao_agente_unidade", label: "Unidade", type: "select", options: OPCOES_TEMPO_UNIDADE },
+        { key: "regime_tratamento", label: "Regime de Tratamento", type: "select", options: OPCOES_REGIME_TRATAMENTO_2 },
+        {
+          key: "principal_agente_causador",
+          label: "Principal Agente Causador da Dermatose",
+          type: "select",
+          fullWidth: true,
+          options: [
+            "01 – Cimento", "02 – Borracha", "03 – Plástico", "04 – Solventes Orgânicos", "05 – Graxas",
+            "06 – Óleo de Corte", "07 – Resinas", "08 – Níquel", "09 – Cosméticos", "10 – Madeiras",
+            "11 – Cromo", "12 – Outros", "99 – Ignorado",
+          ],
+        },
+        { key: "principal_agente_outros", label: "Se Outros, especifique", type: "text", showIf: { key: "principal_agente_causador", equals: "12 – Outros" } },
+        {
+          key: "localizacao_lesao",
+          label: "Localização da Lesão (parte do corpo atingida)",
+          type: "select",
+          fullWidth: true,
+          options: ["01 – Mão", "02 – Membro superior", "03 – Cabeça", "04 – Pescoço", "05 – Tórax", "06 – Abdome", "07 – Membro inferior", "08 – Pé", "09 – Todo o corpo", "10 – Outro"],
+        },
+        { key: "localizacao_lesao_outro", label: "Se Outro, especifique", type: "text", showIf: { key: "localizacao_lesao", equals: "10 – Outro" } },
+        { key: "teste_epicutaneo_positivo", label: "Teste Epicutâneo Positivo", type: "select", options: OPCOES_SIM_NAO_COD },
+        { key: "diagnostico_especifico_cid10", label: "Diagnóstico Específico – CID-10", type: "text" },
+      ],
+    },
+    {
+      title: "Afastamento e Evolução",
+      fields: [
+        { key: "afastamento_trabalho_tratamento", label: "Houve afastamento do trabalho para tratamento?", type: "select", options: OPCOES_SIM_NAO_COD },
+        { key: "tempo_afastamento_valor", label: "Tempo de Afastamento do Trabalho para Tratamento", type: "number" },
+        { key: "tempo_afastamento_unidade", label: "Unidade", type: "select", options: OPCOES_TEMPO_UNIDADE },
+        { key: "afastamento_resultado", label: "Com Afastamento do Trabalho", type: "select", options: OPCOES_MELHORA_PIORA_COD },
+        { key: "outros_trabalhadores_mesma_doenca", label: "Há ou houve outros trabalhadores com a mesma doença no local de trabalho?", type: "select", options: OPCOES_SIM_NAO_COD, fullWidth: true },
+      ],
+    },
+    {
+      title: "Conclusão",
+      fields: [
+        {
+          key: "conduta_geral",
+          label: "Conduta Geral",
+          type: "checkbox-group",
+          fullWidth: true,
+          options: ["Afastamento do agente do risco com mudança de função e/ou posto de trabalho", "Afastamento do local de trabalho", "Adoção de proteção individual", "Adoção de mudança na organização do trabalho", "Adoção de proteção coletiva", "Nenhum"],
+        },
+        { key: "conduta_geral_outros", label: "Outros (especifique)", type: "text", fullWidth: true },
+        { key: "evolucao_caso", label: "Evolução do Caso", type: "select", options: OPCOES_EVOLUCAO_CASO_9, fullWidth: true },
+        { key: "data_obito", label: "Se Óbito, Data", type: "date" },
+        { key: "cat_emitida", label: "Foi emitida a Comunicação de Acidente do Trabalho – CAT?", type: "select", options: OPCOES_CAT_COD },
+        { key: "informacoes_complementares", label: "Informações complementares e observações — Ex.: Descreva como ocorreu o acidente ou o adoecimento e as lesões existentes.", type: "textarea", fullWidth: true, required: true, placeholder: "Ex: Descreva como ocorreu o acidente ou o adoecimento e as lesões existentes" },
+      ],
+    },
+    {
+      title: "Notificador",
+      fields: [
+        { key: "notificador_nome", label: "Notificador / Nome", type: "text", required: true },
+        { key: "notificador_funcao", label: "Função", type: "text", required: true },
+      ],
+    },
+  ],
+};

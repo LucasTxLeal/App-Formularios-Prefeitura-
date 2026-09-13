@@ -1,0 +1,138 @@
+import { FormSchema } from "./types";
+import {
+  OPCOES_SEXO_COD,
+  OPCOES_GESTANTE_COD,
+  OPCOES_RACA_COR_COD,
+  OPCOES_ESCOLARIDADE_COD,
+  OPCOES_ZONA,
+  OPCOES_SITUACAO_MERCADO_TRABALHO_COD,
+  OPCOES_TERCEIRIZADA_COD,
+  OPCOES_TEMPO_UNIDADE,
+  OPCOES_REGIME_TRATAMENTO_2,
+  OPCOES_SIM_NAO_COD,
+  OPCOES_MELHORA_PIORA_COD,
+  OPCOES_EVOLUCAO_CASO_9,
+  OPCOES_CAT_COD,
+} from "./options";
+
+export const pairSchema: FormSchema = {
+  slug: "pair",
+  table: "pair_reports",
+  codigo: "H83.3",
+  titulo: "PAIR (Perda Auditiva Induzida por Ruído)",
+  definicaoCaso:
+    "Todos os casos de Perda Auditiva Induzida por Ruído (PAIR) caracterizados pela diminuição gradual da acuidade auditiva, decorrente da exposição continuada ao ruído, associada ou não a substâncias químicas, no ambiente de trabalho. É sempre neurossensorial, geralmente bilateral, irreversível e passível de não progressão uma vez cessada a exposição ao ruído.",
+  primaryDateKey: "data_diagnostico",
+  primaryLabelKey: "nome_paciente",
+  sections: [
+    {
+      title: "Dados Gerais",
+      fields: [
+        { key: "data_notificacao", label: "Data da Notificação", type: "date", required: true },
+        { key: "data_diagnostico", label: "Data do Diagnóstico", type: "date", required: true },
+        { key: "nome_paciente", label: "Nome do Paciente", type: "text", required: true, fullWidth: true },
+        { key: "data_nascimento", label: "Data de Nascimento", type: "date" },
+        { key: "idade", label: "Idade", type: "number", maxLength: 3 },
+        { key: "sexo", label: "Sexo", type: "select", options: OPCOES_SEXO_COD },
+        { key: "gestante", label: "Gestante", type: "select", options: OPCOES_GESTANTE_COD },
+        { key: "raca_cor", label: "Raça/Cor", type: "select", options: OPCOES_RACA_COR_COD },
+        { key: "escolaridade", label: "Escolaridade", type: "select", options: OPCOES_ESCOLARIDADE_COD, fullWidth: true },
+        { key: "cartao_sus", label: "Número do Cartão SUS", type: "text", maxLength: 15, numericOnly: true },
+        { key: "nome_mae", label: "Nome da mãe", type: "text" },
+      ],
+    },
+    {
+      title: "Dados de Residência",
+      fields: [
+        { key: "uf", label: "UF", type: "text", maxLength: 2, uppercase: true },
+        { key: "municipio_residencia", label: "Município de Residência", type: "text" },
+        { key: "bairro", label: "Bairro", type: "text" },
+        { key: "logradouro", label: "Logradouro (rua, avenida...)", type: "text" },
+        { key: "numero_endereco", label: "Número", type: "text" },
+        { key: "complemento", label: "Complemento (apto., casa...)", type: "text" },
+        { key: "cep", label: "CEP", type: "text", maxLength: 8, numericOnly: true },
+        { key: "telefone", label: "(DDD) Telefone", type: "text", maxLength: 11, numericOnly: true },
+        { key: "zona", label: "Zona", type: "select", options: OPCOES_ZONA },
+      ],
+    },
+    {
+      title: "Dados do Trabalho",
+      fields: [
+        { key: "ocupacao", label: "Ocupação", type: "text", required: true, highlight: true },
+        { key: "situacao_mercado_trabalho", label: "Situação no Mercado de Trabalho", type: "select", options: OPCOES_SITUACAO_MERCADO_TRABALHO_COD, fullWidth: true },
+        { key: "tempo_trabalho_ocupacao", label: "Tempo de Trabalho na Ocupação", type: "text" },
+      ],
+    },
+    {
+      title: "Dados da Empresa Contratante",
+      fields: [
+        { key: "empresa_cnpj_cpf", label: "Registro/CNPJ ou CPF", type: "text", maxLength: 14, numericOnly: true },
+        { key: "empresa_nome", label: "Nome da Empresa ou Empregador", type: "text" },
+        { key: "empresa_cnae", label: "Atividade Econômica (CNAE)", type: "text", required: true },
+        { key: "empresa_uf", label: "UF", type: "text", maxLength: 2, uppercase: true },
+        { key: "empresa_municipio", label: "Município", type: "text" },
+        { key: "empresa_bairro", label: "Bairro", type: "text" },
+        { key: "empresa_endereco", label: "Endereço", type: "text" },
+        { key: "empresa_numero", label: "Número", type: "text" },
+        { key: "empresa_telefone", label: "(DDD) Telefone", type: "text", maxLength: 11, numericOnly: true },
+        { key: "empresa_terceirizada", label: "O Empregador é Empresa Terceirizada?", type: "select", options: OPCOES_TERCEIRIZADA_COD, fullWidth: true },
+      ],
+    },
+    {
+      title: "Quadro Clínico e Exposição",
+      fields: [
+        { key: "agravos_associados", label: "Agravos Associados", type: "checkbox-group", fullWidth: true, options: ["Hipertensão Arterial", "Diabetes Mellitus", "Transtorno Mental", "Tuberculose", "Hanseníase", "Asma"] },
+        { key: "agravos_outras", label: "Outras (descreva)", type: "text", fullWidth: true },
+        { key: "tempo_exposicao_agente_valor", label: "Tempo de Exposição ao Agente de Risco", type: "number" },
+        { key: "tempo_exposicao_agente_unidade", label: "Unidade", type: "select", options: OPCOES_TEMPO_UNIDADE },
+        { key: "regime_tratamento", label: "Regime de Tratamento", type: "select", options: OPCOES_REGIME_TRATAMENTO_2 },
+        { key: "tipo_ruido_predominante", label: "Tipo de Ruído Predominante", type: "select", options: ["1 – Ruído Contínuo", "2 – Ruído Intermitente", "3 – Ambos", "9 – Ignorado"] },
+        {
+          key: "exposicao_concomitante",
+          label: "Exposição Concomitante a Ruído e:",
+          type: "checkbox-group",
+          fullWidth: true,
+          options: ["Solvente à base de Tolueno", "Metais Pesados", "Gases Tóxicos", "Medicamentos Ototóxicos"],
+        },
+        { key: "exposicao_concomitante_outros", label: "Outros (especifique)", type: "text", fullWidth: true },
+        { key: "sintomas", label: "Sintomas", type: "checkbox-group", fullWidth: true, options: ["Zumbido", "Tontura", "Dificuldade para compreensão da fala", "Cefaléia"] },
+        { key: "sintomas_outros", label: "Outros (especifique)", type: "text", fullWidth: true },
+        { key: "diagnostico_especifico_cid10", label: "Diagnóstico Específico – CID-10", type: "text" },
+      ],
+    },
+    {
+      title: "Afastamento e Evolução",
+      fields: [
+        { key: "afastamento_trabalho_tratamento", label: "Houve afastamento do trabalho para tratamento?", type: "select", options: OPCOES_SIM_NAO_COD },
+        { key: "tempo_afastamento_valor", label: "Tempo de Afastamento do Trabalho para Tratamento", type: "number" },
+        { key: "tempo_afastamento_unidade", label: "Unidade", type: "select", options: OPCOES_TEMPO_UNIDADE },
+        { key: "afastamento_resultado", label: "Com Afastamento do Trabalho", type: "select", options: OPCOES_MELHORA_PIORA_COD },
+        { key: "outros_trabalhadores_mesma_doenca", label: "Há ou houve outros trabalhadores com a mesma doença no local de trabalho?", type: "select", options: OPCOES_SIM_NAO_COD, fullWidth: true },
+      ],
+    },
+    {
+      title: "Conclusão",
+      fields: [
+        {
+          key: "conduta_geral",
+          label: "Conduta Geral",
+          type: "checkbox-group",
+          fullWidth: true,
+          options: ["Afastamento do agente do risco com mudança de função e/ou posto de trabalho", "Adoção de mudança na organização do trabalho", "Adoção de proteção coletiva", "Afastamento do local de trabalho", "Adoção de proteção individual", "Nenhum"],
+        },
+        { key: "conduta_geral_outros", label: "Outros (especifique)", type: "text", fullWidth: true },
+        { key: "evolucao_caso", label: "Evolução do Caso", type: "select", options: OPCOES_EVOLUCAO_CASO_9, fullWidth: true },
+        { key: "data_obito", label: "Se Óbito, Data", type: "date" },
+        { key: "cat_emitida", label: "Foi emitida a Comunicação de Acidente do Trabalho?", type: "select", options: OPCOES_CAT_COD },
+        { key: "informacoes_complementares", label: "Informações complementares e observações — Ex.: Descreva como ocorreu o acidente ou o adoecimento e as lesões existentes.", type: "textarea", fullWidth: true, required: true, placeholder: "Ex: Descreva como ocorreu o acidente ou o adoecimento e as lesões existentes" },
+      ],
+    },
+    {
+      title: "Notificador",
+      fields: [
+        { key: "notificador_nome", label: "Notificador / Nome", type: "text", required: true },
+        { key: "notificador_funcao", label: "Função", type: "text", required: true },
+      ],
+    },
+  ],
+};

@@ -1,0 +1,216 @@
+import { FormSchema } from "./types";
+
+const OPCOES_SEXO_PLANO = ["Masculino", "Feminino"];
+const OPCOES_GESTANTE_PLANO = ["Não", "1º Trimestre", "2º Trimestre", "3º Trimestre", "Idade Gestacional Ignorada", "Ignorado"];
+const OPCOES_RACA_COR_PLANO = ["Branca", "Preta", "Amarela", "Parda", "Indígena", "Ignorado"];
+const OPCOES_ESCOLARIDADE_PLANO = [
+  "Analfabeto",
+  "1º a 4º série incompleta",
+  "4º completa",
+  "5º a 8º série incompleta",
+  "Ensino fundamental completo",
+  "Ensino médio incompleto",
+  "Ensino médio completo",
+  "Educação superior incompleta",
+  "Educação superior completa",
+  "Ignorado",
+  "Não se aplica",
+];
+const OPCOES_SITUACAO_MERCADO_PLANO = [
+  "Empregado registrado com carteira assinada",
+  "Empregado não registrado",
+  "Autônomo/conta própria",
+  "Servidor público estatutário",
+  "Servidor público celetista",
+  "Aposentado",
+  "Desempregado",
+  "Trabalho temporário",
+  "Cooperativado",
+  "Trabalhador avulso",
+  "Empregador",
+  "Outros",
+  "Ignorado",
+];
+const OPCOES_TERCEIRIZADA_PLANO = ["Sim", "Não", "Não se aplica", "Ignorado"];
+
+const OPCOES_SOROLOGIA = ["1 – Positivo", "2 – Negativo", "3 – Inconclusivo", "4 – Não realizado", "9 – Ignorado"];
+
+export const materialBiologicoSchema: FormSchema = {
+  slug: "material-biologico",
+  table: "material_biologico_reports",
+  codigo: "Z20.9",
+  titulo: "Acidente de Trabalho com Material Biológico",
+  definicaoCaso:
+    "Todo caso de acidente de trabalho ocorrido com quaisquer categorias profissionais, envolvendo exposição direta ou indireta do trabalhador a material biológico (orgânico) potencialmente contaminado por patógenos (vírus, bactérias, fungos, príons e protozoários), por meio de material perfuro-cortante ou não.",
+  primaryDateKey: "data_acidente",
+  primaryLabelKey: "nome_paciente",
+  sections: [
+    {
+      title: "Dados Gerais",
+      fields: [
+        { key: "data_notificacao", label: "Data da notificação", type: "date", required: true },
+        { key: "data_acidente", label: "Data do acidente", type: "date", required: true },
+        { key: "nome_paciente", label: "Nome do paciente", type: "text", required: true, fullWidth: true },
+        { key: "data_nascimento", label: "Data de nascimento", type: "date" },
+        { key: "sexo", label: "Sexo", type: "select", options: OPCOES_SEXO_PLANO },
+        { key: "gestante", label: "Gestante", type: "select", options: OPCOES_GESTANTE_PLANO },
+        { key: "raca_cor", label: "Raça/Cor", type: "select", options: OPCOES_RACA_COR_PLANO },
+        { key: "escolaridade", label: "Escolaridade", type: "select", options: OPCOES_ESCOLARIDADE_PLANO, fullWidth: true },
+        { key: "cartao_sus", label: "Número do Cartão SUS", type: "text", maxLength: 15, numericOnly: true },
+        { key: "nome_mae", label: "Nome da mãe", type: "text" },
+        { key: "municipio_residencia", label: "Município de residência", type: "text" },
+        { key: "logradouro", label: "Logradouro", type: "text" },
+        { key: "numero_endereco", label: "Número", type: "text" },
+        { key: "complemento", label: "Complemento", type: "text" },
+        { key: "bairro", label: "Bairro", type: "text" },
+      ],
+    },
+    {
+      title: "Dados do Trabalho",
+      fields: [
+        { key: "ocupacao", label: "Ocupação", type: "text", required: true, highlight: true },
+        { key: "situacao_mercado_trabalho", label: "Situação no mercado de trabalho", type: "select", options: OPCOES_SITUACAO_MERCADO_PLANO, fullWidth: true },
+        { key: "tempo_trabalho_ocupacao", label: "Tempo de trabalho na ocupação", type: "text" },
+      ],
+    },
+    {
+      title: "Dados da Empresa Contratante",
+      fields: [
+        { key: "empresa_cnpj_cpf", label: "Registro/CNPJ ou CPF", type: "text", maxLength: 14, numericOnly: true },
+        { key: "empresa_nome", label: "Nome da empresa ou empregador", type: "text" },
+        { key: "empresa_cnae", label: "Atividade econômica – CNAE", type: "text", required: true },
+        { key: "empresa_endereco", label: "Endereço", type: "text" },
+        { key: "empresa_bairro", label: "Bairro", type: "text" },
+        { key: "empresa_municipio", label: "Município", type: "text" },
+        { key: "empresa_numero", label: "Número", type: "text" },
+        { key: "empresa_uf", label: "UF", type: "text", maxLength: 2, uppercase: true },
+        { key: "empresa_terceirizada", label: "O empregador é empresa terceirizada?", type: "select", options: OPCOES_TERCEIRIZADA_PLANO, fullWidth: true },
+      ],
+    },
+    {
+      title: "Dados da Exposição",
+      fields: [
+        { key: "tipo_exposicao_i", label: "Tipo de Exposição I", type: "select", options: ["Percutânea", "Mucosa (oral/ocular)", "Outros"] },
+        { key: "tipo_exposicao_i_outros", label: "Se Outros, descreva", type: "text", showIf: { key: "tipo_exposicao_i", equals: "Outros" } },
+        { key: "tipo_exposicao_ii", label: "Tipo de Exposição II", type: "select", options: ["Pele íntegra", "Pele não íntegra"] },
+        {
+          key: "material_organico",
+          label: "Material Orgânico",
+          type: "checkbox-group",
+          fullWidth: true,
+          options: [
+            "1 – Sangue",
+            "2 – Líquor",
+            "3 – Líquido pleural",
+            "4 – Líquido ascítico",
+            "5 – Líquido amniótico",
+            "6 – Fluido com sangue",
+            "7 – Soro/plasma",
+            "8 – Outros",
+            "9 – Ignorado",
+          ],
+        },
+        {
+          key: "circunstancia_acidente",
+          label: "Circunstância do Acidente",
+          type: "select",
+          fullWidth: true,
+          options: [
+            "01 – Administração de medicação endovenosa",
+            "02 – Administração de medicação intramuscular",
+            "03 – Administração de medicação subcutânea",
+            "04 – Administração de medicação intradérmica",
+            "05 – Punção venosa/arterial para coleta de sangue",
+            "06 – Punção venosa/arterial não especificada",
+            "07 – Descarte inadequado de material perfurocortante",
+            "09 – Lavanderia",
+            "10 – Lavagem de material",
+            "11 – Manipulação de caixa com material perfurocortante",
+            "12 – Procedimento cirúrgico",
+            "13 – Procedimento odontológico",
+            "14 – Procedimento laboratorial",
+            "15 – Dextro",
+            "16 – Reencape",
+            "98 – Outros",
+            "99 – Ignorado",
+          ],
+        },
+        { key: "agente", label: "Agente", type: "select", options: ["1 – Agulha com lúmen (luz)", "2 – Agulha sem lúmen/maciça", "3 – Intracath", "4 – Vidros", "5 – Lâmina/lanceta (qualquer tipo)", "9 – Ignorado"] },
+        {
+          key: "uso_epi",
+          label: "Uso de EPI (assinale o que estava em uso)",
+          type: "checkbox-group",
+          fullWidth: true,
+          options: ["Luva", "Avental", "Óculos", "Máscara", "Proteção facial", "Bota"],
+        },
+        { key: "situacao_vacinal_hepatite_b", label: "Situação vacinal do acidentado em relação à Hepatite B (3 doses)", type: "select", options: ["1 – Vacinado", "2 – Não vacinado", "9 – Ignorado"], fullWidth: true },
+      ],
+    },
+    {
+      title: "Resultados de Exames – Momento do Acidente (Data Zero)",
+      fields: [
+        { key: "exame_momento_anti_hiv", label: "Anti-HIV", type: "select", options: OPCOES_SOROLOGIA },
+        { key: "exame_momento_hbsag", label: "HBsAg", type: "select", options: OPCOES_SOROLOGIA },
+        { key: "exame_momento_anti_hbs", label: "Anti-HBs", type: "select", options: OPCOES_SOROLOGIA },
+        { key: "exame_momento_anti_hcv", label: "Anti-HCV", type: "select", options: OPCOES_SOROLOGIA },
+      ],
+    },
+    {
+      title: "Paciente Fonte",
+      fields: [
+        { key: "paciente_fonte_conhecida", label: "Paciente Fonte Conhecida?", type: "select", options: ["1 – Sim", "2 – Não", "9 – Ignorado"] },
+        { key: "fonte_anti_hiv", label: "Anti-HIV (fonte)", type: "select", options: OPCOES_SOROLOGIA },
+        { key: "fonte_hbsag", label: "HBsAg (fonte)", type: "select", options: OPCOES_SOROLOGIA },
+        { key: "fonte_anti_hbs", label: "Anti-HBs (fonte)", type: "select", options: OPCOES_SOROLOGIA },
+        { key: "fonte_anti_hcv", label: "Anti-HCV (fonte)", type: "select", options: OPCOES_SOROLOGIA },
+      ],
+    },
+    {
+      title: "Conduta e Evolução",
+      fields: [
+        {
+          key: "conduta_momento_acidente",
+          label: "Conduta no momento do acidente",
+          type: "checkbox-group",
+          fullWidth: true,
+          options: [
+            "Sem indicação de quimioprofilaxia",
+            "Recusou quimioprofilaxia indicada",
+            "AZT + 3TC",
+            "AZT + 3TC + Indinavir",
+            "AZT + 3TC + Nelfinavir",
+            "Imunoglobulina humana contra hepatite B (HBIG)",
+            "Vacina contra hepatite B",
+          ],
+        },
+        { key: "conduta_outro_arv", label: "Outro esquema de ARV – especifique", type: "text", fullWidth: true },
+        {
+          key: "evolucao_caso",
+          label: "Evolução do Caso",
+          type: "select",
+          fullWidth: true,
+          options: [
+            "1 – Alta com conversão sorológica",
+            "2 – Alta sem conversão sorológica",
+            "3 – Alta paciente fonte negativo",
+            "4 – Abandono",
+            "5 – Óbito por acidente com exposição a material biológico",
+            "6 – Óbito por outra causa",
+            "9 – Ignorado",
+          ],
+        },
+        { key: "alta_conversao_virus", label: "Se alta com conversão sorológica, especifique o vírus", type: "text", showIf: { key: "evolucao_caso", equals: "1 – Alta com conversão sorológica" } },
+        { key: "data_obito", label: "Se Óbito, Data", type: "date" },
+        { key: "cat_emitida", label: "Foi emitida a Comunicação de Acidente do Trabalho – CAT?", type: "select", options: ["1 – Sim", "2 – Não", "3 – Não se aplica", "9 – Ignorado"] },
+        { key: "informacoes_complementares", label: "Informações complementares e observações — Ex.: Descreva como ocorreu o acidente ou o adoecimento e as lesões existentes.", type: "textarea", fullWidth: true, required: true, placeholder: "Ex: Descreva como ocorreu o acidente ou o adoecimento e as lesões existentes" },
+      ],
+    },
+    {
+      title: "Notificador",
+      fields: [
+        { key: "notificador_nome", label: "Notificador / Nome", type: "text", required: true },
+        { key: "notificador_funcao", label: "Função", type: "text", required: true },
+      ],
+    },
+  ],
+};

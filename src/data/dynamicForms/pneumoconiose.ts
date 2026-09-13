@@ -1,0 +1,143 @@
+import { FormSchema } from "./types";
+import {
+  OPCOES_SEXO_COD,
+  OPCOES_GESTANTE_COD,
+  OPCOES_RACA_COR_COD,
+  OPCOES_ESCOLARIDADE_COD,
+  OPCOES_ZONA,
+  OPCOES_SITUACAO_MERCADO_TRABALHO_COD,
+  OPCOES_TERCEIRIZADA_COD,
+  OPCOES_TEMPO_UNIDADE,
+  OPCOES_REGIME_TRATAMENTO_2,
+  OPCOES_SIM_NAO_COD,
+  OPCOES_EVOLUCAO_CASO_9,
+  OPCOES_CAT_COD,
+} from "./options";
+
+export const pneumoconioseSchema: FormSchema = {
+  slug: "pneumoconiose",
+  table: "pneumoconiose_reports",
+  codigo: "J64",
+  titulo: "Pneumoconiose",
+  definicaoCaso:
+    "Todas as doenças pulmonares causadas pela inalação e acúmulo de poeiras inorgânicas nos pulmões com reação tissular à presença dessas poeiras, devido exposição no ambiente ou processo de trabalho. Exemplos: asbestose, silicose, beriliose, estanhose, siderose, entre outras.",
+  primaryDateKey: "data_diagnostico",
+  primaryLabelKey: "nome_paciente",
+  sections: [
+    {
+      title: "Dados Gerais",
+      fields: [
+        { key: "data_notificacao", label: "Data da Notificação", type: "date", required: true },
+        { key: "data_diagnostico", label: "Data do Diagnóstico", type: "date", required: true },
+        { key: "nome_paciente", label: "Nome do Paciente", type: "text", required: true, fullWidth: true },
+        { key: "data_nascimento", label: "Data de Nascimento", type: "date" },
+        { key: "idade", label: "Idade", type: "number", maxLength: 3 },
+        { key: "sexo", label: "Sexo", type: "select", options: OPCOES_SEXO_COD },
+        { key: "gestante", label: "Gestante", type: "select", options: OPCOES_GESTANTE_COD },
+        { key: "raca_cor", label: "Raça/Cor", type: "select", options: OPCOES_RACA_COR_COD },
+        { key: "escolaridade", label: "Escolaridade", type: "select", options: OPCOES_ESCOLARIDADE_COD, fullWidth: true },
+        { key: "cartao_sus", label: "Número do Cartão SUS", type: "text", maxLength: 15, numericOnly: true },
+        { key: "nome_mae", label: "Nome da mãe", type: "text" },
+      ],
+    },
+    {
+      title: "Dados de Residência",
+      fields: [
+        { key: "uf", label: "UF", type: "text", maxLength: 2, uppercase: true },
+        { key: "municipio_residencia", label: "Município de Residência", type: "text" },
+        { key: "bairro", label: "Bairro", type: "text" },
+        { key: "logradouro", label: "Logradouro (rua, avenida...)", type: "text" },
+        { key: "numero_endereco", label: "Número", type: "text" },
+        { key: "complemento", label: "Complemento (apto., casa...)", type: "text" },
+        { key: "cep", label: "CEP", type: "text", maxLength: 8, numericOnly: true },
+        { key: "telefone", label: "(DDD) Telefone", type: "text", maxLength: 11, numericOnly: true },
+        { key: "zona", label: "Zona", type: "select", options: OPCOES_ZONA },
+      ],
+    },
+    {
+      title: "Dados do Trabalho",
+      fields: [
+        { key: "ocupacao", label: "Ocupação", type: "text", required: true, highlight: true },
+        { key: "situacao_mercado_trabalho", label: "Situação no Mercado de Trabalho", type: "select", options: OPCOES_SITUACAO_MERCADO_TRABALHO_COD, fullWidth: true },
+        { key: "tempo_trabalho_ocupacao", label: "Tempo de Trabalho na Ocupação", type: "text" },
+      ],
+    },
+    {
+      title: "Dados da Empresa Contratante",
+      fields: [
+        { key: "empresa_cnpj_cpf", label: "Registro/CNPJ ou CPF", type: "text", maxLength: 14, numericOnly: true },
+        { key: "empresa_nome", label: "Nome da Empresa ou Empregador", type: "text" },
+        { key: "empresa_cnae", label: "Atividade Econômica (CNAE)", type: "text", required: true },
+        { key: "empresa_uf", label: "UF", type: "text", maxLength: 2, uppercase: true },
+        { key: "empresa_municipio", label: "Município", type: "text" },
+        { key: "empresa_bairro", label: "Bairro", type: "text" },
+        { key: "empresa_endereco", label: "Endereço", type: "text" },
+        { key: "empresa_numero", label: "Número", type: "text" },
+        { key: "empresa_telefone", label: "(DDD) Telefone", type: "text", maxLength: 11, numericOnly: true },
+        { key: "empresa_terceirizada", label: "O Empregador é Empresa Terceirizada?", type: "select", options: OPCOES_TERCEIRIZADA_COD, fullWidth: true },
+      ],
+    },
+    {
+      title: "Quadro Clínico e Exposição",
+      fields: [
+        { key: "agravos_associados", label: "Agravos Associados", type: "checkbox-group", fullWidth: true, options: ["Limitação crônica ao fluxo aéreo", "Câncer", "Tuberculose", "Tireoidite", "Artrite reumatóide"] },
+        { key: "agravos_outras", label: "Outras (descreva)", type: "text", fullWidth: true },
+        { key: "tempo_exposicao_agente_valor", label: "Tempo de Exposição ao Agente de Risco", type: "number" },
+        { key: "tempo_exposicao_agente_unidade", label: "Unidade", type: "select", options: OPCOES_TEMPO_UNIDADE },
+        { key: "regime_tratamento", label: "Regime de Tratamento", type: "select", options: OPCOES_REGIME_TRATAMENTO_2 },
+        { key: "exposicao_multiplos_vinculos", label: "A exposição a poeiras e minerais ocorreu em um ou mais vínculos distintos da empresa?", type: "select", options: OPCOES_SIM_NAO_COD, fullWidth: true },
+        { key: "exposicao_multiplos_vinculos_especificar", label: "Especifique", type: "text", fullWidth: true },
+        {
+          key: "agentes_exposicao",
+          label: "Agentes de Exposição",
+          type: "checkbox-group",
+          fullWidth: true,
+          options: ["Sílica", "Asbesto", "Poeiras de carvão mineral", "Poeiras mistas (silicatos, talco)", "Metais duros (cobalto, titânio, tungstênio)", "Poeiras de abrasivos", "Berílio", "Poeiras orgânicas"],
+        },
+        { key: "habito_fumar", label: "Hábito de Fumar", type: "select", options: ["1 – Sim", "2 – Não", "3 – Ex-fumante", "9 – Ignorado"] },
+        { key: "tempo_exposicao_tabaco_valor", label: "Tempo de Exposição ao Tabaco", type: "number" },
+        { key: "tempo_exposicao_tabaco_unidade", label: "Unidade", type: "select", options: OPCOES_TEMPO_UNIDADE },
+      ],
+    },
+    {
+      title: "Diagnóstico",
+      fields: [
+        { key: "confirmacao_diagnostica", label: "Confirmação Diagnóstica", type: "checkbox-group", fullWidth: true, options: ["Radiografia de tórax", "Tomografia de tórax de alta resolução", "Biópsia pulmonar", "Outro"] },
+        { key: "diagnostico_especifico_cid10", label: "Diagnóstico Específico – CID-10", type: "text" },
+        {
+          key: "outros_trabalhadores_mesma_doenca",
+          label: "Há ou houve outros trabalhadores com a mesma doença no local de trabalho?",
+          type: "select",
+          fullWidth: true,
+          options: ["Nenhum", "Outros"],
+        },
+        { key: "outros_trabalhadores_especificar", label: "Se Outros, especifique", type: "text", fullWidth: true, showIf: { key: "outros_trabalhadores_mesma_doenca", equals: "Outros" } },
+        { key: "avaliacao_funcional", label: "Avaliação funcional (prova de função pulmonar)", type: "select", options: OPCOES_SIM_NAO_COD },
+        { key: "resultado_avaliacao_funcional", label: "Resultado da avaliação funcional", type: "select", options: ["1 – Normal", "2 – Alterada"] },
+      ],
+    },
+    {
+      title: "Conclusão",
+      fields: [
+        {
+          key: "conduta_geral",
+          label: "Conduta Geral",
+          type: "checkbox-group",
+          fullWidth: true,
+          options: ["Afastamento do agente do risco com mudança de função e/ou posto de trabalho", "Afastamento do local de trabalho", "Adoção de proteção individual", "Adoção de mudança na organização do trabalho", "Adoção de proteção coletiva"],
+        },
+        { key: "evolucao_caso", label: "Evolução do Caso", type: "select", options: OPCOES_EVOLUCAO_CASO_9, fullWidth: true },
+        { key: "data_obito", label: "Se Óbito, Data", type: "date" },
+        { key: "cat_emitida", label: "Foi emitida a Comunicação de Acidente do Trabalho?", type: "select", options: OPCOES_CAT_COD },
+        { key: "informacoes_complementares", label: "Informações complementares e observações — Ex.: Descreva como ocorreu o acidente ou o adoecimento e as lesões existentes.", type: "textarea", fullWidth: true, required: true, placeholder: "Ex: Descreva como ocorreu o acidente ou o adoecimento e as lesões existentes" },
+      ],
+    },
+    {
+      title: "Notificador",
+      fields: [
+        { key: "notificador_nome", label: "Notificador / Nome", type: "text", required: true },
+        { key: "notificador_funcao", label: "Função", type: "text", required: true },
+      ],
+    },
+  ],
+};

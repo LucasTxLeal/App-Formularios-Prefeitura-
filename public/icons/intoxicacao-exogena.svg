@@ -1,0 +1,16 @@
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="120" r="116" fill="#ea580c"/>
+  <circle cx="120" cy="120" r="116" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="4"/>
+  <!-- gargalo do frasco -->
+  <rect x="110" y="56" width="20" height="18" rx="3" fill="#ffffff"/>
+  <!-- tampa -->
+  <rect x="106" y="48" width="28" height="10" rx="3" fill="#ffffff"/>
+  <!-- corpo do frasco -->
+  <path d="M 108 74 L 132 74 L 148 96 L 168 160 C 171 172 163 184 150 184 L 90 184 C 77 184 69 172 72 160 L 92 96 Z" fill="#ffffff"/>
+  <!-- rotulo de perigo -->
+  <rect x="90" y="120" width="60" height="38" rx="4" fill="#ea580c"/>
+  <!-- simbolo de alerta no rotulo -->
+  <path d="M 120 128 L 134 152 L 106 152 Z" fill="#ffffff"/>
+  <rect x="118.5" y="134" width="3" height="10" fill="#ea580c"/>
+  <circle cx="120" cy="147" r="1.8" fill="#ea580c"/>
+</svg>

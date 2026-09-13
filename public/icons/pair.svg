@@ -1,0 +1,24 @@
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="120" r="116" fill="#16a34a"/>
+  <circle cx="120" cy="120" r="116" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="4"/>
+  <!-- orelha externa -->
+  <path d="M 118 60
+           C 145 58 166 78 168 104
+           C 170 124 158 138 146 148
+           C 138 154 134 160 136 170
+           C 138 182 128 190 118 186
+           C 108 182 106 170 112 162
+           C 96 160 82 148 78 130
+           C 73 106 90 62 118 60 Z"
+        fill="#ffffff"/>
+  <!-- canal auditivo interno -->
+  <path d="M 116 88 C 130 88 140 100 138 114 C 136 126 126 132 116 128"
+        fill="none" stroke="#16a34a" stroke-width="9" stroke-linecap="round"/>
+  <!-- ondas sonoras -->
+  <path d="M 178 88 A 52 52 0 0 1 182 152" stroke="#ffffff" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M 195 76 A 74 74 0 0 1 199 164" stroke="#ffffff" stroke-width="8" stroke-linecap="round" fill="none" stroke-opacity="0.6"/>
+  <!-- alerta -->
+  <path d="M 62 178 L 76 200 L 48 200 Z" fill="#ffffff"/>
+  <rect x="60.5" y="184" width="3" height="9" fill="#16a34a"/>
+  <circle cx="62" cy="196" r="1.8" fill="#16a34a"/>
+</svg>

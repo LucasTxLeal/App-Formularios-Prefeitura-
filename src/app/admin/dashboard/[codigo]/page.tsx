@@ -7,12 +7,13 @@ import { ArrowLeft, FileText, Calendar, User } from "lucide-react";
 
 interface ReportRow {
   id: string;
-  nome_paciente: string;
-  data_acidente: string;
-  hora_acidente: string | null;
-  empresa_nome: string | null;
-  notificador_nome: string;
-  created_at: string;
+  slug: string;
+  codigo: string;
+  titulo: string;
+  data: string | null;
+  nomePaciente: string | null;
+  notificadorNome: string | null;
+  createdAt: string;
 }
 
 export default function PastaCodigoPage({
@@ -23,6 +24,7 @@ export default function PastaCodigoPage({
   const router = useRouter();
   const { codigo } = use(params);
   const [reports, setReports] = useState<ReportRow[]>([]);
+  const [unidadeNome, setUnidadeNome] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,6 +32,7 @@ export default function PastaCodigoPage({
       .then((r) => r.json())
       .then((data) => {
         if (data.reports) setReports(data.reports);
+        if (data.unidadeNome) setUnidadeNome(data.unidadeNome);
       })
       .finally(() => setLoading(false));
   }, [codigo]);
@@ -45,8 +48,10 @@ export default function PastaCodigoPage({
             <ArrowLeft size={18} />
           </button>
           <div>
-            <p className="font-bold text-sm">Pasta {codigo}</p>
-            <p className="text-xs text-brand-slate-700/50">Notificações Y96 ordenadas por data</p>
+            <p className="font-bold text-sm">{unidadeNome ?? `Pasta ${codigo}`}</p>
+            <p className="text-xs text-brand-slate-700/50">
+              Código {codigo} · Todas as notificações, ordenadas por data
+            </p>
           </div>
         </div>
       </header>
@@ -63,9 +68,9 @@ export default function PastaCodigoPage({
             <table className="w-full text-sm">
               <thead className="bg-brand-slate-50 text-brand-slate-700/60 text-xs uppercase">
                 <tr>
-                  <th className="text-left px-5 py-3 font-semibold">Data do acidente</th>
+                  <th className="text-left px-5 py-3 font-semibold">Tipo</th>
+                  <th className="text-left px-5 py-3 font-semibold">Data</th>
                   <th className="text-left px-5 py-3 font-semibold">Paciente</th>
-                  <th className="text-left px-5 py-3 font-semibold">Empresa</th>
                   <th className="text-left px-5 py-3 font-semibold">Notificador</th>
                   <th className="text-left px-5 py-3 font-semibold"></th>
                 </tr>
@@ -73,28 +78,32 @@ export default function PastaCodigoPage({
               <tbody>
                 {reports.map((r, i) => (
                   <motion.tr
-                    key={r.id}
+                    key={`${r.slug}-${r.id}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.03 }}
-                    onClick={() => router.push(`/admin/dashboard/${codigo}/${r.id}`)}
+                    onClick={() => router.push(`/admin/dashboard/${codigo}/${r.slug}/${r.id}`)}
                     className="border-t border-brand-slate-100 hover:bg-brand-blue-50/40 cursor-pointer transition-colors"
                   >
+                    <td className="px-5 py-3">
+                      <span className="inline-flex items-center text-[10px] font-bold tracking-wide text-brand-blue-600 bg-brand-blue-50 rounded-full px-2 py-0.5">
+                        {r.codigo}
+                      </span>
+                      <p className="text-xs text-brand-slate-700/60 mt-0.5">{r.titulo}</p>
+                    </td>
                     <td className="px-5 py-3 whitespace-nowrap">
                       <span className="flex items-center gap-1.5 text-brand-slate-700">
                         <Calendar size={14} className="text-brand-slate-700/40" />
-                        {new Date(r.data_acidente + "T00:00:00").toLocaleDateString("pt-BR")}
-                        {r.hora_acidente ? ` · ${r.hora_acidente.slice(0, 5)}` : ""}
+                        {r.data ? new Date(r.data + "T00:00:00").toLocaleDateString("pt-BR") : "—"}
                       </span>
                     </td>
                     <td className="px-5 py-3">
                       <span className="flex items-center gap-1.5">
                         <User size={14} className="text-brand-slate-700/40" />
-                        {r.nome_paciente}
+                        {r.nomePaciente || "—"}
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-brand-slate-700/70">{r.empresa_nome || "—"}</td>
-                    <td className="px-5 py-3 text-brand-slate-700/70">{r.notificador_nome}</td>
+                    <td className="px-5 py-3 text-brand-slate-700/70">{r.notificadorNome || "—"}</td>
                     <td className="px-5 py-3 text-right">
                       <span className="inline-flex items-center gap-1 text-brand-blue-600 font-medium text-xs">
                         <FileText size={14} />

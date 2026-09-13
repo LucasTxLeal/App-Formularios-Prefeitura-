@@ -1,0 +1,19 @@
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="120" r="116" fill="#0d9488"/>
+  <circle cx="120" cy="120" r="116" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="4"/>
+  <!-- antebraco -->
+  <rect x="108" y="148" width="28" height="44" rx="12" fill="#ffffff"/>
+  <!-- palma -->
+  <rect x="86" y="118" width="56" height="42" rx="18" fill="#ffffff"/>
+  <!-- dedos -->
+  <rect x="72" y="92" width="15" height="42" rx="7.5" fill="#ffffff"/>
+  <rect x="91" y="80" width="15" height="48" rx="7.5" fill="#ffffff"/>
+  <rect x="110" y="78" width="15" height="48" rx="7.5" fill="#ffffff"/>
+  <rect x="129" y="84" width="15" height="44" rx="7.5" fill="#ffffff"/>
+  <!-- manchas/lesoes na pele -->
+  <circle cx="100" cy="140" r="6" fill="#0d9488"/>
+  <circle cx="120" cy="102" r="5" fill="#0d9488"/>
+  <circle cx="135" cy="108" r="4.5" fill="#0d9488"/>
+  <circle cx="118" cy="142" r="5" fill="#0d9488"/>
+  <circle cx="80" cy="108" r="4" fill="#0d9488"/>
+</svg>

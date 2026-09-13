@@ -2,8 +2,9 @@
 
 import { Suspense, useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldCheck, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
+import { ArrowRight, AlertCircle, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   return (
@@ -72,12 +73,19 @@ function LoginForm() {
             initial={{ scale: 0.6, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.15, type: "spring", stiffness: 200 }}
-            className="mx-auto mb-4 w-16 h-16 rounded-full bg-brand-green-500 flex items-center justify-center"
+            className="mx-auto mb-4 w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg"
           >
-            <ShieldCheck className="text-white" size={32} />
+            <Image
+              src="/logo.jpg"
+              alt="Vigilância em Saúde do Trabalhador"
+              width={112}
+              height={112}
+              className="object-cover w-full h-full"
+              priority
+            />
           </motion.div>
           <h1 className="text-white text-xl font-bold tracking-tight">
-            Segurança do Trabalho
+            Vigilância em Saúde do Trabalhador
           </h1>
           <p className="text-brand-blue-100 text-sm mt-1">
             Plataforma Municipal de Relatórios

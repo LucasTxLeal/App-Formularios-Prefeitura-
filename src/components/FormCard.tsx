@@ -16,10 +16,10 @@ export default function FormCard({ form, onSelect }: FormCardProps) {
     <motion.button
       type="button"
       onClick={() => onSelect(form)}
-      whileHover={{ y: -6, scale: 1.03 }}
+      whileHover={{ y: -4 }}
       whileTap={{ scale: 0.96 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl p-6 text-center border bg-white shadow-card transition-colors ${
+      className={`group relative flex h-full min-h-[224px] w-full min-w-0 flex-col items-center gap-3 rounded-2xl px-4 pb-5 pt-7 text-center border bg-white shadow-card transition-colors ${
         form.ativo
           ? "border-brand-slate-100 hover:border-brand-blue-500"
           : "border-brand-slate-100 opacity-60 cursor-not-allowed"
@@ -29,18 +29,29 @@ export default function FormCard({ form, onSelect }: FormCardProps) {
         {form.codigo}
       </span>
 
-      <div
-        className={`w-14 h-14 rounded-xl flex items-center justify-center ${
-          form.ativo
-            ? "bg-brand-blue-50 text-brand-blue-600 group-hover:bg-brand-blue-600 group-hover:text-white"
-            : "bg-brand-slate-100 text-brand-slate-700/40"
-        } transition-colors`}
-      >
-        {form.ativo ? <Icon size={26} /> : <Lock size={22} />}
-      </div>
+      {form.iconSrc ? (
+        // eslint-disable-next-line @next/next/no-img-element -- SVG vetorial, não precisa do otimizador de imagem
+        <img
+          src={form.iconSrc}
+          alt={form.titulo}
+          width={64}
+          height={64}
+          className={`w-16 h-16 shrink-0 ${form.ativo ? "" : "grayscale opacity-70"}`}
+        />
+      ) : (
+        <div
+          className={`w-16 h-16 shrink-0 rounded-xl flex items-center justify-center ${
+            form.ativo
+              ? "bg-brand-blue-50 text-brand-blue-600 group-hover:bg-brand-blue-600 group-hover:text-white"
+              : "bg-brand-slate-100 text-brand-slate-700/40"
+          } transition-colors`}
+        >
+          {form.ativo && Icon ? <Icon size={26} /> : <Lock size={22} />}
+        </div>
+      )}
 
-      <div>
-        <p className="font-semibold text-sm text-brand-slate-900">{form.titulo}</p>
+      <div className="w-full min-w-0">
+        <p className="flex min-h-10 items-center justify-center font-semibold text-sm text-brand-slate-900">{form.titulo}</p>
         <p className="text-xs text-brand-slate-700/50 mt-1">{form.descricao}</p>
       </div>
 

@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Segurança do Trabalho | Plataforma de Relatórios",
+  title: "Vigilância em Saúde do Trabalhador | Plataforma de Relatórios",
   description: "Plataforma municipal de formulários de segurança do trabalho",
+  icons: {
+    icon: "/favicon-256.jpg",
+    shortcut: "/favicon-256.jpg",
+    apple: "/favicon-256.jpg",
+  },
 };
 
 export default function RootLayout({

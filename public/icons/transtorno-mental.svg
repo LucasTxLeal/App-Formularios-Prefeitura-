@@ -1,0 +1,31 @@
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="120" r="116" fill="#7c3aed"/>
+  <circle cx="120" cy="120" r="116" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="4"/>
+  <!-- silhueta de cerebro -->
+  <path d="M 100 66
+           C 84 64 72 74 70 88
+           C 58 90 50 102 52 114
+           C 44 120 42 134 50 144
+           C 48 156 56 168 70 170
+           C 72 180 82 188 94 186
+           C 100 192 112 192 118 186
+           C 124 192 136 192 142 186
+           C 154 188 164 180 166 170
+           C 180 168 188 156 186 144
+           C 194 134 192 120 184 114
+           C 186 102 178 90 166 88
+           C 164 74 152 64 136 66
+           C 130 60 118 58 112 64
+           C 108 60 100 62 100 66 Z"
+        fill="#ffffff"/>
+  <!-- divisao central (sulco) -->
+  <path d="M 120 68 C 118 100 122 140 120 184" stroke="#7c3aed" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- dobras internas -->
+  <path d="M 78 108 C 88 104 96 110 92 120 C 88 128 96 132 104 128" stroke="#7c3aed" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M 96 148 C 104 144 110 150 108 158" stroke="#7c3aed" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M 162 108 C 152 104 144 110 148 120 C 152 128 144 132 136 128" stroke="#7c3aed" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M 144 148 C 136 144 130 150 132 158" stroke="#7c3aed" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- ondas de tensao acima -->
+  <path d="M 92 48 C 96 40 104 40 108 48" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M 132 48 C 136 40 144 40 148 48" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none"/>
+</svg>

@@ -1,6 +1,6 @@
 // Helpers de sessão baseados em cookies assinados com HMAC-SHA256 via Web Crypto API.
-// Usamos Web Crypto (em vez do módulo "crypto" do Node) para que este arquivo
-// funcione tanto em rotas de API (Node runtime) quanto no middleware (Edge Runtime).
+// Web Crypto (em vez do módulo "crypto" do Node) funciona tanto em rotas de
+// API (Node runtime) quanto no proxy/middleware (Edge Runtime).
 
 const SECRET = process.env.SESSION_SECRET || "dev-secret-change-me";
 
@@ -43,7 +43,6 @@ async function verify(signed: string | undefined | null): Promise<string | null>
 
   if (sig.length !== expectedSig.length) return null;
 
-  // Comparação em tempo constante
   let mismatch = 0;
   for (let i = 0; i < sig.length; i++) {
     mismatch |= sig.charCodeAt(i) ^ expectedSig.charCodeAt(i);

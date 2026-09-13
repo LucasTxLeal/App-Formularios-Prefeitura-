@@ -1,0 +1,17 @@
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="120" r="116" fill="#1e3a8a"/>
+  <circle cx="120" cy="120" r="116" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="4"/>
+  <!-- laco de conscientizacao: duas alcas cruzadas + fitas -->
+  <g fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+    <!-- alca esquerda -->
+    <path d="M 118 108 C 100 92 78 92 68 106 C 58 120 66 138 84 140 C 98 142 112 132 118 116" />
+    <!-- alca direita -->
+    <path d="M 122 108 C 140 92 162 92 172 106 C 182 120 174 138 156 140 C 142 142 128 132 122 116" />
+  </g>
+  <!-- fitas caindo -->
+  <path d="M 118 114 C 112 134 100 150 92 172" stroke="#ffffff" stroke-width="13" stroke-linecap="round" fill="none"/>
+  <path d="M 122 114 C 128 134 138 148 132 172" stroke="#ffffff" stroke-width="13" stroke-linecap="round" fill="none"/>
+  <!-- lupa (elemento causal ocupacional) -->
+  <circle cx="172" cy="172" r="13" fill="none" stroke="#ffffff" stroke-width="6"/>
+  <line x1="181" y1="181" x2="192" y2="192" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+</svg>

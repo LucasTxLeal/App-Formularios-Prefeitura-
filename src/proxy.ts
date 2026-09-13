@@ -4,7 +4,6 @@ import { ACCESS_COOKIE, ADMIN_COOKIE, readAccessCode, readAdminEmail } from "@/l
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protege a central e os formularios: exige codigo de acesso valido na sessao
   if (pathname.startsWith("/central") || pathname.startsWith("/formulario")) {
     const token = request.cookies.get(ACCESS_COOKIE)?.value;
     const code = await readAccessCode(token);
@@ -16,7 +15,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Protege o painel administrativo (exceto a propria tela de login)
   if (pathname.startsWith("/admin/dashboard")) {
     const token = request.cookies.get(ADMIN_COOKIE)?.value;
     const email = await readAdminEmail(token);

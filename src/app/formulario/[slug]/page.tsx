@@ -5,14 +5,28 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, Construction } from "lucide-react";
 import { FORM_TYPES } from "@/data/formTypes";
+import { getFormSchema, DYNAMIC_FORM_SLUGS } from "@/data/dynamicForms/registry";
+import DynamicForm from "@/components/DynamicForm";
 
-export default function FormularioGenericoPage({
+export default function FormularioPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const router = useRouter();
   const { slug } = use(params);
+
+  if (DYNAMIC_FORM_SLUGS.includes(slug)) {
+    const schema = getFormSchema(slug);
+    if (schema) {
+      return <DynamicForm schema={schema} />;
+    }
+  }
+
+  return <PlaceholderPage slug={slug} />;
+}
+
+function PlaceholderPage({ slug }: { slug: string }) {
+  const router = useRouter();
   const form = FORM_TYPES.find((f) => f.slug === slug);
 
   return (

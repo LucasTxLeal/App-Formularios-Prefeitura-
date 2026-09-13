@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Mail, KeyRound, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
 
@@ -46,8 +47,13 @@ export default function AdminLoginPage() {
         className="w-full max-w-md bg-white rounded-2xl shadow-card overflow-hidden"
       >
         <div className="bg-brand-slate-900 px-8 py-8 text-center">
-          <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-brand-blue-600 flex items-center justify-center">
-            <Lock className="text-white" size={28} />
+          <div className="relative mx-auto mb-4 w-20 h-20">
+            <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white/20">
+              <Image src="/logo.jpg" alt="Vigilância em Saúde do Trabalhador" width={80} height={80} className="object-cover w-full h-full" />
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-brand-blue-600 border-2 border-brand-slate-900 flex items-center justify-center">
+              <Lock className="text-white" size={13} />
+            </div>
           </div>
           <h1 className="text-white text-xl font-bold">Painel Administrativo</h1>
           <p className="text-brand-slate-100/70 text-sm mt-1">Acesso restrito à coordenação</p>

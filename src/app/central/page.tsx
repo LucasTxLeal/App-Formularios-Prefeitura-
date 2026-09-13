@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ShieldCheck, LogOut, Building2 } from "lucide-react";
+import { LogOut, Building2 } from "lucide-react";
 import FormCard from "@/components/FormCard";
 import { FORM_TYPES, FormTypeDef } from "@/data/formTypes";
 
@@ -37,13 +38,15 @@ export default function CentralPage() {
     }, 380);
   }
 
+  const TransitioningIcon = transitioning?.icon;
+
   return (
     <main className="min-h-screen">
       <header className="bg-white border-b border-brand-slate-100 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-brand-blue-600 flex items-center justify-center">
-              <ShieldCheck className="text-white" size={20} />
+            <div className="w-11 h-11 rounded-full overflow-hidden border border-brand-slate-100 shadow-sm shrink-0">
+              <Image src="/logo.jpg" alt="Vigilância em Saúde do Trabalhador" width={44} height={44} className="object-cover w-full h-full" priority />
             </div>
             <div>
               <p className="font-bold text-sm leading-tight">Central de Formulários</p>
@@ -72,16 +75,17 @@ export default function CentralPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-2xl font-bold text-brand-slate-900">Selecione um formulário</h1>
+          <h1 className="text-2xl font-bold text-brand-slate-900">Selecione uma Notificação</h1>
           <p className="text-brand-slate-700/60 mt-1">
-            Escolha entre os 11 tipos de registro disponíveis para sua unidade.
+            Escolha entre os tipos de notificação disponíveis para sua unidade.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid auto-rows-fr grid-cols-1 min-[360px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {FORM_TYPES.map((form, i) => (
             <motion.div
               key={form.slug}
+              className="h-full min-w-0"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.04 }}
@@ -107,7 +111,12 @@ export default function CentralPage() {
               transition={{ type: "spring", stiffness: 260, damping: 20 }}
               className="bg-white rounded-2xl px-8 py-6 flex items-center gap-3 shadow-2xl"
             >
-              <transitioning.icon className="text-brand-blue-600" size={28} />
+              {transitioning.iconSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element -- SVG vetorial
+                <img src={transitioning.iconSrc} alt="" width={32} height={32} className="w-8 h-8 shrink-0" />
+              ) : (
+                TransitioningIcon && <TransitioningIcon className="text-brand-blue-600" size={28} />
+              )}
               <span className="font-semibold text-brand-slate-900">{transitioning.titulo}</span>
             </motion.div>
           </motion.div>

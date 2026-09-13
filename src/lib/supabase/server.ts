@@ -1,7 +1,6 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 // Cliente administrativo, usado SOMENTE dentro de rotas /api (server-side).
-// Nunca importe este arquivo em componentes client ("use client").
 export function createServiceClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

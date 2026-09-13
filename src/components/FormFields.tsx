@@ -1,5 +1,8 @@
 "use client";
 
+import { useId } from "react";
+import { formatBrazilianDate, parseBrazilianDate } from "@/lib/date";
+
 interface SelectFieldProps {
   label: string;
   value: string;
@@ -7,6 +10,7 @@ interface SelectFieldProps {
   options: string[];
   required?: boolean;
   placeholder?: string;
+  highlight?: boolean;
 }
 
 export function SelectField({
@@ -16,11 +20,17 @@ export function SelectField({
   options,
   required,
   placeholder = "Selecione...",
+  highlight,
 }: SelectFieldProps) {
   return (
     <div>
-      <label className="block text-sm font-medium text-brand-slate-700 mb-1.5">
+      <label
+        className={`block text-sm mb-1.5 ${
+          highlight ? "font-bold text-brand-slate-900" : "font-medium text-brand-slate-700"
+        }`}
+      >
         {label}
+        {required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
       <select
         required={required}
@@ -47,6 +57,11 @@ interface TextFieldProps {
   type?: string;
   placeholder?: string;
   maxLength?: number;
+  highlight?: boolean;
+  /** Aceita apenas dígitos (CPF/CNPJ, CEP, telefone, cartão SUS). */
+  numericOnly?: boolean;
+  /** Converte automaticamente para maiúsculas (UF). */
+  uppercase?: boolean;
 }
 
 export function TextField({
@@ -57,20 +72,79 @@ export function TextField({
   type = "text",
   placeholder,
   maxLength,
+  highlight,
+  numericOnly,
+  uppercase,
 }: TextFieldProps) {
+  const inputId = useId();
+
+  function handleChange(raw: string) {
+    let next = raw;
+    if (numericOnly) next = next.replace(/\D/g, "");
+    if (uppercase) next = next.toUpperCase();
+    onChange(next);
+  }
+
+  return (
+    <div>
+      <label
+        htmlFor={inputId}
+        className={`block text-sm mb-1.5 ${
+          highlight ? "font-bold text-brand-slate-900" : "font-medium text-brand-slate-700"
+        }`}
+      >
+        {label}
+        {required && <span className="text-red-500 ml-0.5">*</span>}
+      </label>
+      <input
+        id={inputId}
+        required={required}
+        type={type === "date" ? "text" : type}
+        value={type === "date" ? formatBrazilianDate(value) : value}
+        onChange={(e) => {
+          if (type !== "date") {
+            handleChange(e.target.value);
+            return;
+          }
+          const digits = e.target.value.replace(/\D/g, "").slice(0, 8);
+          const formatted = digits.replace(/^(\d{2})(\d)/, "$1/$2").replace(/^(\d{2}\/\d{2})(\d)/, "$1/$2");
+          const iso = parseBrazilianDate(formatted);
+          e.target.setCustomValidity(formatted && !iso ? "Informe uma data válida no formato DD/MM/AAAA." : "");
+          onChange(iso ?? formatted);
+        }}
+        placeholder={type === "date" ? "DD/MM/AAAA" : placeholder}
+        maxLength={type === "date" ? 10 : maxLength}
+        inputMode={type === "date" || numericOnly ? "numeric" : undefined}
+        pattern={type === "date" ? "[0-9]{2}/[0-9]{2}/[0-9]{4}" : numericOnly ? "[0-9]*" : undefined}
+        className="input"
+      />
+    </div>
+  );
+}
+
+interface TextAreaFieldProps {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+  placeholder?: string;
+  rows?: number;
+}
+
+export function TextAreaField({ label, value, onChange, required, placeholder, rows = 4 }: TextAreaFieldProps) {
   return (
     <div>
       <label className="block text-sm font-medium text-brand-slate-700 mb-1.5">
         {label}
+        {required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
-      <input
+      <textarea
         required={required}
-        type={type}
+        rows={rows}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        maxLength={maxLength}
-        className="input"
+        className="input resize-none"
       />
     </div>
   );
@@ -93,7 +167,7 @@ export function CheckboxGroupField({ label, values, onChange, options }: Checkbo
   }
 
   return (
-    <div className="sm:col-span-2">
+    <div>
       <label className="block text-sm font-medium text-brand-slate-700 mb-2">{label}</label>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {options.map((opt) => (
