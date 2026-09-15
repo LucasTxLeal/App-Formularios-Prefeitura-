@@ -5,6 +5,47 @@ import { getFormSchema } from "@/data/dynamicForms/registry";
 import { getClientIp } from "@/lib/request";
 import { logAuditEvent } from "@/lib/auditLog";
 
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string; id: string }> }
+) {
+  const admin = await readAdminEmail(request.cookies.get(ADMIN_COOKIE)?.value);
+  if (!admin) return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+
+  const origin = request.headers.get("origin");
+  if ((origin && origin !== request.nextUrl.origin) || request.headers.get("sec-fetch-site") === "cross-site") {
+    return NextResponse.json({ error: "Origem não autorizada." }, { status: 403 });
+  }
+
+  const { slug, id } = await params;
+  const schema = getFormSchema(slug);
+  if (!schema) return NextResponse.json({ error: "Formulário desconhecido." }, { status: 404 });
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+    return NextResponse.json({ error: "Identificador inválido." }, { status: 400 });
+  }
+
+  try {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase.from(schema.table).delete().eq("id", id).select("id").maybeSingle();
+    if (error) {
+      console.error("Erro ao excluir notificação:", error);
+      return NextResponse.json({ error: "Não foi possível excluir a notificação." }, { status: 500 });
+    }
+    if (!data) return NextResponse.json({ error: "Notificação não encontrada ou já excluída." }, { status: 404 });
+
+    // Uma falha no log não altera o resultado de uma exclusão já concluída.
+    try {
+      await logAuditEvent(supabase, { actorType: "admin", actor: admin, action: "delete_report", resourceType: slug, resourceId: id, ip: getClientIp(request) });
+    } catch (error) {
+      console.error("Erro ao registrar exclusão na auditoria:", error);
+    }
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Erro ao excluir notificação:", error);
+    return NextResponse.json({ error: "Não foi possível excluir a notificação." }, { status: 500 });
+  }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string; id: string }> }

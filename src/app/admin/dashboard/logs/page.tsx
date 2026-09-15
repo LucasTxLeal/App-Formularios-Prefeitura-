@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowLeft, ScrollText, LogIn, Eye, FileUp, ShieldAlert } from "lucide-react";
+import { ArrowLeft, ScrollText, LogIn, Eye, FileUp, ShieldAlert, Trash2 } from "lucide-react";
 import { FORM_TYPES } from "@/data/formTypes";
 
 interface LogRow {
@@ -23,6 +23,7 @@ const ACTION_LABELS: Record<string, { label: string; icon: typeof LogIn }> = {
   login_failed: { label: "Tentativa de login falhou", icon: ShieldAlert },
   view_report: { label: "Visualizou notificação", icon: Eye },
   submit_report: { label: "Enviou notificação", icon: FileUp },
+  delete_report: { label: "Excluiu notificação", icon: Trash2 },
 };
 
 function formTitulo(slug: string | null) {

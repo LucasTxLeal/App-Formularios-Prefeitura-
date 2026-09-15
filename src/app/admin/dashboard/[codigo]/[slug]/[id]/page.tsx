@@ -1,9 +1,9 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, Printer } from "lucide-react";
+import { ArrowLeft, Printer, Trash2 } from "lucide-react";
 import { FormSchema } from "@/data/dynamicForms/types";
 
 type ReportData = Record<string, string | number | string[] | null>;
@@ -27,6 +27,29 @@ export default function RelatorioDetalhePage({
   const [schema, setSchema] = useState<FormSchema | null>(null);
   const [unidadeNome, setUnidadeNome] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const deleteInProgress = useRef(false);
+
+  async function handleDelete() {
+    if (!report || !schema || deleteInProgress.current) return;
+    const patient = String(report[schema.primaryLabelKey] ?? "");
+    if (!window.confirm(`Excluir definitivamente esta notificação de ${schema.titulo}?\n\nPaciente: ${patient}\nProtocolo: ${id}\n\nOs dados deste registro serão apagados do banco. Esta ação não pode ser desfeita.`)) return;
+    deleteInProgress.current = true;
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      const response = await fetch(`/api/admin/reports/${slug}/${id}`, { method: "DELETE" });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Não foi possível excluir a notificação.");
+      router.replace(`/admin/dashboard/${codigo}`);
+      router.refresh();
+    } catch (error) {
+      setDeleteError(error instanceof Error ? error.message : "Erro de conexão ao excluir a notificação.");
+      deleteInProgress.current = false;
+      setDeleting(false);
+    }
+  }
 
   useEffect(() => {
     fetch(`/api/admin/reports/${slug}/${id}`)
@@ -50,7 +73,7 @@ export default function RelatorioDetalhePage({
   return (
     <main className="min-h-screen bg-brand-slate-100">
       <header className="no-print bg-white border-b border-brand-slate-100 sticky top-0 z-10">
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-3xl mx-auto px-6 py-4 flex flex-wrap gap-3 items-center justify-between">
           <button
             onClick={() => router.push(`/admin/dashboard/${codigo}`)}
             className="flex items-center gap-2 text-sm text-brand-slate-700/70 hover:text-brand-blue-600 transition-colors"
@@ -65,7 +88,17 @@ export default function RelatorioDetalhePage({
             <Printer size={16} />
             Imprimir / Salvar PDF
           </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={deleting}
+            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          >
+            <Trash2 size={16} />
+            {deleting ? "Excluindo..." : "Excluir notificação"}
+          </button>
         </div>
+        {deleteError && <p role="alert" className="max-w-3xl mx-auto px-6 pb-4 text-sm text-red-600">{deleteError}</p>}
       </header>
 
       <div className="max-w-3xl mx-auto px-6 py-10">

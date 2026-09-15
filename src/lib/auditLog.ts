@@ -5,7 +5,8 @@ export type AuditAction =
   | "login_admin"
   | "login_failed"
   | "view_report"
-  | "submit_report";
+  | "submit_report"
+  | "delete_report";
 
 interface AuditEvent {
   actorType: "code" | "admin";
