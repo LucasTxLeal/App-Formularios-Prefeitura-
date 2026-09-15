@@ -31,6 +31,25 @@ export default function DynamicForm({ schema }: { schema: FormSchema }) {
     setValues((prev) => ({ ...prev, [key]: value }));
   }
 
+  function handleFieldEnter(e: React.KeyboardEvent<HTMLFormElement>) {
+    if (e.key !== "Enter" || e.nativeEvent.isComposing || e.ctrlKey || e.altKey || e.metaKey) return;
+
+    const target = e.target;
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) return;
+
+    e.preventDefault();
+    if (e.repeat) return;
+
+    const fields = Array.from(e.currentTarget.querySelectorAll<HTMLElement>(
+      'input, select, textarea, button[type="submit"]'
+    )).filter((field) =>
+      !field.matches(':disabled, [type="hidden"], [tabindex="-1"]') && field.getClientRects().length > 0
+    );
+    const index = fields.indexOf(target);
+    if (index < 0) return;
+    fields[index + (e.shiftKey ? -1 : 1)]?.focus();
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -96,7 +115,7 @@ export default function DynamicForm({ schema }: { schema: FormSchema }) {
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto px-6 py-8 space-y-6">
+      <form onSubmit={handleSubmit} onKeyDown={handleFieldEnter} className="max-w-3xl mx-auto px-6 py-8 space-y-6">
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
