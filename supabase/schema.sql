@@ -251,11 +251,13 @@ create table if not exists material_biologico_reports (
   alta_conversao_virus text,
   data_obito date,
   cat_emitida text,
+  informacoes_complementares text,
   notificador_nome text not null,
   notificador_funcao text not null,
   status text not null default 'enviado',
   created_at timestamptz not null default now()
 );
+alter table material_biologico_reports add column if not exists informacoes_complementares text;
 create index if not exists idx_material_biologico_reports_code on material_biologico_reports(access_code);
 create index if not exists idx_material_biologico_reports_created on material_biologico_reports(created_at desc);
 
