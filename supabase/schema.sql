@@ -730,3 +730,13 @@ alter table access_logs enable row level security;
 -- adicional: a rota /api/admin/login valida as credenciais
 -- usando supabase.auth.signInWithPassword no servidor.
 -- ------------------------------------------------------------
+
+-- Contato e zona de residencia (Y96 e Z20.9)
+alter table public.y96_reports
+  add column if not exists cep text,
+  add column if not exists telefone text,
+  add column if not exists zona text;
+alter table public.material_biologico_reports
+  add column if not exists cep text,
+  add column if not exists telefone text;
+notify pgrst, 'reload schema';

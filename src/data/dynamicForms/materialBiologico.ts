@@ -63,6 +63,8 @@ export const materialBiologicoSchema: FormSchema = {
         { key: "numero_endereco", label: "Número", type: "text" },
         { key: "complemento", label: "Complemento", type: "text" },
         { key: "bairro", label: "Bairro", type: "text" },
+        { key: "cep", label: "CEP", type: "text", maxLength: 8, numericOnly: true },
+        { key: "telefone", label: "(DDD) Telefone", type: "text", maxLength: 11, numericOnly: true },
       ],
     },
     {
