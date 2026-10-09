@@ -1,4 +1,5 @@
 import { FormSchema } from "./types";
+import { OPCOES_ZONA } from "./options";
 
 const OPCOES_SEXO_PLANO = ["Masculino", "Feminino"];
 const OPCOES_GESTANTE_PLANO = ["Não", "1º Trimestre", "2º Trimestre", "3º Trimestre", "Idade Gestacional Ignorada", "Ignorado"];
@@ -65,6 +66,7 @@ export const materialBiologicoSchema: FormSchema = {
         { key: "bairro", label: "Bairro", type: "text" },
         { key: "cep", label: "CEP", type: "text", maxLength: 8, numericOnly: true },
         { key: "telefone", label: "(DDD) Telefone", type: "text", maxLength: 11, numericOnly: true },
+        { key: "zona", label: "Zona", type: "select", options: OPCOES_ZONA },
       ],
     },
     {

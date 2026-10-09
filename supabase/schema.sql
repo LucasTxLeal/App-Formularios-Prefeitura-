@@ -740,3 +740,8 @@ alter table public.material_biologico_reports
   add column if not exists cep text,
   add column if not exists telefone text;
 notify pgrst, 'reload schema';
+
+-- Zona de residencia no formulario de material biologico
+alter table public.material_biologico_reports add column if not exists zona text;
+notify pgrst, 'reload schema';
+
