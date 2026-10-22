@@ -52,7 +52,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { data, error } = await supabase
       .from(schema.table)
       .insert(payload)
-      .select("id")
+      .select("*")
       .single();
 
     if (error) {
@@ -67,9 +67,21 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       resourceType: slug,
       resourceId: data.id,
       ip: getClientIp(request),
-    });
+    }).catch((error) => console.error("Erro de auditoria após envio:", error));
 
-    return NextResponse.json({ success: true, id: data.id });
+    // Retorna apenas o registro recém-criado nesta requisição autenticada.
+    const savedValues: Record<string, unknown> = {};
+    for (const section of schema.sections) {
+      for (const field of section.fields) savedValues[field.key] = data[field.key];
+    }
+    let unidade = code;
+    try {
+      const { data: unit } = await supabase.from("access_codes").select("unidade_nome").eq("code", code).maybeSingle();
+      unidade = unit?.unidade_nome ?? code;
+    } catch { /* O envio permanece concluído mesmo se o nome não puder ser consultado. */ }
+    return NextResponse.json({ success: true, id: data.id, receipt: {
+      id: data.id, created_at: data.created_at, unidade, values: savedValues,
+    } }, { headers: { "Cache-Control": "no-store" } });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Erro inesperado ao processar requisição." }, { status: 500 });

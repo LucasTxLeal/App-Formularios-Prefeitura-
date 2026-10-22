@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { ReportReceipt } from "@/lib/reportPdf";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, CheckCircle2, Loader2, AlertCircle, Home, LayoutGrid } from "lucide-react";
@@ -26,6 +27,21 @@ export default function DynamicForm({ schema }: { schema: FormSchema }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [receipt, setReceipt] = useState<ReportReceipt | null>(null);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
+
+  async function downloadPdf() {
+    if (!receipt || downloading) return;
+    setDownloading(true);
+    setDownloadError(null);
+    try {
+      const { createReportPdf } = await import("@/lib/reportPdf");
+      await createReportPdf(schema, receipt).save(`notificacao-${schema.slug}-${receipt.id}.pdf`, { returnPromise: true });
+    } catch {
+      setDownloadError("Não foi possível gerar o PDF. Tente baixar novamente; sua notificação já foi salva.");
+    } finally { setDownloading(false); }
+  }
 
   function set(key: string, value: string | string[]) {
     setValues((prev) => ({ ...prev, [key]: value }));
@@ -69,6 +85,7 @@ export default function DynamicForm({ schema }: { schema: FormSchema }) {
         return;
       }
 
+      setReceipt(data.receipt ?? null);
       setSuccess(true);
     } catch {
       setError("Erro de conexão. Tente novamente.");
@@ -272,6 +289,17 @@ export default function DynamicForm({ schema }: { schema: FormSchema }) {
               <p className="text-brand-slate-700/60 text-sm mt-1.5">
                 A ficha {schema.codigo} foi registrada com sucesso e vinculada à sua unidade.
               </p>
+              {receipt && (
+                <>
+                  <p className="mt-3 text-xs text-brand-slate-700/60 break-all">Protocolo: {receipt.id}</p>
+                  <button type="button" onClick={downloadPdf} disabled={downloading}
+                    className="mt-4 w-full bg-brand-green-500 hover:bg-brand-green-600 disabled:opacity-50 text-white font-semibold py-3 rounded-xl">
+                    {downloading ? "Gerando PDF..." : "Baixar formulário em PDF"}
+                  </button>
+                  <p className="mt-2 text-xs text-brand-slate-700/60">Baixe sua cópia antes de sair desta tela.</p>
+                </>
+              )}
+              {downloadError && <p role="alert" className="mt-3 text-sm text-red-600">{downloadError}</p>}
               <button
                 onClick={() => router.push("/central")}
                 className="mt-6 w-full flex items-center justify-center gap-2 bg-brand-blue-600 hover:bg-brand-blue-700 text-white font-semibold py-3 rounded-xl transition-colors"
