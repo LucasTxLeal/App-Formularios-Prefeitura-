@@ -21,6 +21,7 @@ insert into access_codes (code, unidade_nome) values
   ('3040', 'UBSF Quinta'),
   ('4020', 'UPA Cassino'),
   ('5010', 'UBS Parque Marinha'),
+  ('6030', 'UPA Junção'),
   ('1111', 'Teste')
 on conflict (code) do update set unidade_nome = excluded.unidade_nome;
 
